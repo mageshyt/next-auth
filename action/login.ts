@@ -10,6 +10,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     const validateFields = LoginSchema.safeParse(values);
     if (!validateFields.success) {
       return {
+        status: false,
         error: "Invalid Fields",
       };
     }
@@ -21,6 +22,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       return {
+        success: false,
         error: error.response?.data.message,
       };
     }
