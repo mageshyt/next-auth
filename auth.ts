@@ -8,14 +8,24 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
+  events: {},
+  pages: {
+    signIn: "/auth/api",
+    error: "/auth/error",
+  },
   session: {
     strategy: "jwt",
+    // max age should be 15 days
+    // maxAge: 15 * 24 * 60 * 60,
+    maxAge: 2 * 60 * 60,
   },
   callbacks: {
     async jwt({ token, user }) {
       // remove id from user
 
+      // console.log("TOKEN:", token);
       return {
+        exp: token.exp,
         ...token,
         ...user,
       };
@@ -26,7 +36,7 @@ export const {
         session.user.id = token.sub;
       }
       const { user }: any = token;
-      console.log("USER ", user);
+
       session.user.email = user?.email as string;
       session.user.id = user?.id as string;
       session.user.name = user?.username as string;
@@ -37,7 +47,9 @@ export const {
 
       return session;
     },
-
+    async signIn({ user }) {
+      return true;
+    },
   },
 
   ...authConfig,
