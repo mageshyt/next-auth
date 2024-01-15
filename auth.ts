@@ -1,32 +1,44 @@
+import { DefaultSession } from "next-auth";
 import NextAuth from "next-auth";
-import GitHub from "next-auth/providers/github";
-import Credentials from "@auth/core/providers/credentials";
-import { axiosInstance } from "./lib/axios";
+import authConfig from "./auth.config";
 
 export const {
   handlers: { GET, POST },
   auth,
+  signIn,
+  signOut,
 } = NextAuth({
-  providers: [
-    Credentials({
-      name: "Credentials",
-      credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials, request) {
-        const res = await axiosInstance.post("/auth/login", credentials);
-        const user = res.data;
-
-        if (user) {
-          return user;
-        } else {
-          return null;
-        }
-      },
-    }),
-  ],
   session: {
     strategy: "jwt",
   },
+  callbacks: {
+    async jwt({ token, user }) {
+      // remove id from user
+
+      return {
+        ...token,
+        ...user,
+      };
+    },
+
+    async session({ session, token }) {
+      if (token.sub && session.user) {
+        session.user.id = token.sub;
+      }
+      const { user }: any = token;
+      console.log("USER ", user);
+      session.user.email = user?.email as string;
+      session.user.id = user?.id as string;
+      session.user.name = user?.username as string;
+      session.user.role = user?.role as string;
+      session.user.phone = user?.phone as string;
+      session.user.favoritesIds = user?.favoritesIds as string[];
+      session.user.token = token.token as string;
+
+      return session;
+    },
+
+  },
+
+  ...authConfig,
 });

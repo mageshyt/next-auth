@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { login } from "@/action/login";
+import { useRouter } from "next/navigation";
 
 export const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -35,18 +36,20 @@ export const LoginForm = () => {
   //   -------------State For Form Error and Success ----------------
   const [formError, setFormError] = React.useState<string>("");
   const [formSuccess, setFormSuccess] = React.useState<string>("");
-
+  const router = useRouter();
   const onSubmit = (data: z.infer<typeof LoginSchema>) => {
     try {
       startTransition(() => {
-        const response = login(data).then((res) => {
-          console.log(res);
-          if (res.success) {
+        login(data).then((res) => {
+          if (res?.success) {
             setFormSuccess("Login Success");
             setFormError("");
+
+            setTimeout(() => {
+              router.push("/settings");
+            }, 500);
           } else {
-            const { error } = res;
-            setFormError(error);
+            setFormError(res?.error || "Something went wrong");
             setFormSuccess("");
           }
         });
