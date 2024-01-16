@@ -23,9 +23,7 @@ export const {
     async jwt({ token, user }) {
       // remove id from user
 
-      // console.log("TOKEN:", token);
       return {
-        exp: token.exp,
         ...token,
         ...user,
       };
