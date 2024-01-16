@@ -1,6 +1,8 @@
 "use server";
 
+import { getUserByEmail } from "@/data/user";
 import { axiosInstance } from "@/lib/axios";
+import { db } from "@/lib/db";
 import { hashPassword } from "@/lib/utils";
 
 import { RegisterSchema } from "@/schemas";
@@ -19,27 +21,37 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
 
     const { email, password, name, phone } = validateFields.data;
     const hashedPassword = await hashPassword(password);
+    const existingUser = await getUserByEmail(email);
+    console.log("EXISTING USER ", existingUser, phone);
 
-    const { data } = await axiosInstance.post("/user/create", {
-      email,
-      password: hashedPassword,
-      username: name,
-      phone,
-      user_type: "user",
+    if (existingUser) {
+      return { error: "Email already in use!" };
+    }
+    await db.user.create({
+      data: {
+        name,
+        email,
+        phone,
+        password: hashedPassword,
+      },
     });
 
-    return data;
+    return {
+      success: true,
+      message: "User created successfully",
+    };
   } catch (error) {
+    console.log("REGISTER ", error);
     if (axios.isAxiosError(error)) {
       return {
         success: false,
-        error: error.response?.data.message,
+        message: error.response?.data.message,
       };
     }
 
     return {
       success: false,
-      error: "Something went wrong",
+      message: "Something went wrong",
     };
   }
 };

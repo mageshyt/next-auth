@@ -45,11 +45,11 @@ export const RegisterForm = () => {
         register(data).then((res) => {
           console.log(res);
           if (res.success) {
-            setFormSuccess("Registration Success");
+            setFormSuccess(res.message);
             setFormError("");
           } else {
-            const { error } = res;
-            setFormError(error);
+            const { message } = res;
+            setFormError(message);
             setFormSuccess("");
           }
         });
