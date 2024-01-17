@@ -3,11 +3,12 @@
 import { getUserByEmail } from "@/data/user";
 import { axiosInstance } from "@/lib/axios";
 import { db } from "@/lib/db";
+import { sendVerificationEmail } from "@/lib/mail";
 import { generateVerificationToken } from "@/lib/tokens";
 import { hashPassword } from "@/lib/utils";
 
 import { RegisterSchema } from "@/schemas";
-import axios, { Axios } from "axios";
+import axios from "axios";
 import { z } from "zod";
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
@@ -26,7 +27,9 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     console.log("EXISTING USER ", existingUser, phone);
 
     if (existingUser) {
-      return { error: "Email already in use!" };
+      return {
+        error: "Email already in use!",
+      };
     }
     await db.user.create({
       data: {
@@ -38,7 +41,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     });
 
     const verificationToken = await generateVerificationToken(email);
-
+    sendVerificationEmail(email, name, verificationToken.token);
     return {
       success: true,
       message: "Confirmation email sent",

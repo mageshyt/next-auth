@@ -32,6 +32,15 @@ export const {
     strategy: "jwt",
   },
   callbacks: {
+    async signIn({ account, user }) {
+      // allow OAuth accounts to sign in
+      if (account?.provider != "credentials") return true;
+
+      const existingUser = await getUserById(user.id);
+      if (!existingUser?.email) return false;
+      //  TODO: Add 2FA check
+      return true;
+    },
     async jwt({ token, user }) {
       if (!token.sub) return token;
 
@@ -77,7 +86,6 @@ export const {
     },
   },
 
-  
   adapter: PrismaAdapter(db),
   ...authConfig,
 });
