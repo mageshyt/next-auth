@@ -12,16 +12,24 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
-  events: {},
+  events: {
+    linkAccount: async ({ user }) => {
+      await db.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          emailVerified: new Date(),
+        },
+      });
+    },
+  },
   pages: {
-    signIn: "/auth/api",
-    error: "/auth/error",
+    signIn: "/auth/login",
+    signOut: "/auth/error",
   },
   session: {
     strategy: "jwt",
-    // max age should be 15 days
-    // maxAge: 15 * 24 * 60 * 60,
-    maxAge: 2 * 60 * 60,
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -67,11 +75,8 @@ export const {
 
       return session;
     },
-    async signIn({ user }) {
-      return true;
-    },
   },
 
-  adapter:PrismaAdapter(db),
+  adapter: PrismaAdapter(db),
   ...authConfig,
 });

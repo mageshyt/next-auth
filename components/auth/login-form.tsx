@@ -2,9 +2,11 @@
 import React, { useTransition } from "react";
 import { z } from "zod";
 import { LoginSchema } from "@/schemas";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
+
 import {
   Form,
   FormControl,
@@ -19,9 +21,13 @@ import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { login } from "@/action/login";
-import { useRouter } from "next/navigation";
 
 export const LoginForm = () => {
+  const searchParams = useSearchParams();
+  const urlError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "You already have an account. Please login with your email and password."
+      : "Something went wrong. Please try again.";
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -111,7 +117,7 @@ export const LoginForm = () => {
             />
           </div>
           {/* form Error */}
-          <FormError message={formError} />
+          <FormError message={urlError || formError} />
           <FormSuccess message={formSuccess} />
           {/* submit btn */}
           <Button disabled={isPending} type="submit" className="w-full">
