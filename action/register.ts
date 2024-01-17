@@ -3,6 +3,7 @@
 import { getUserByEmail } from "@/data/user";
 import { axiosInstance } from "@/lib/axios";
 import { db } from "@/lib/db";
+import { generateVerificationToken } from "@/lib/tokens";
 import { hashPassword } from "@/lib/utils";
 
 import { RegisterSchema } from "@/schemas";
@@ -36,9 +37,11 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
       },
     });
 
+    const verificationToken = await generateVerificationToken(email);
+
     return {
       success: true,
-      message: "User created successfully",
+      message: "Confirmation email sent",
     };
   } catch (error) {
     console.log("REGISTER ", error);

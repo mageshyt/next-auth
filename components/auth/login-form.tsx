@@ -27,7 +27,7 @@ export const LoginForm = () => {
   const urlError =
     searchParams.get("error") === "OAuthAccountNotLinked"
       ? "You already have an account. Please login with your email and password."
-      : "Something went wrong. Please try again.";
+      : "";
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -47,7 +47,7 @@ export const LoginForm = () => {
     try {
       startTransition(() => {
         login(data).then((res) => {
-          console.log(res);
+          console.log("res", res);
           if (res?.success) {
             setFormSuccess("Login Success");
             setFormError("");

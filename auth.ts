@@ -77,6 +77,7 @@ export const {
     },
   },
 
+  
   adapter: PrismaAdapter(db),
   ...authConfig,
 });
