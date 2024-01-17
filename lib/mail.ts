@@ -17,7 +17,7 @@ export const sendVerificationEmail = async (
     <p style="color: #555;">Or copy and paste this link into your browser:</p>
     <p style="color: #777; margin-bottom: 20px;">${confirmLink}</p>
     <p style="color: #555;">Thanks,</p>
-    <p style="color: #007BFF;">The ${process.env.NEXTAUTH_URL} Team</p>
+    <p style="color: #007BFF;">The Exile Next Team</p>
   </div>
 `;
 
