@@ -21,6 +21,12 @@ export default async function newVerification(token: string) {
     };
   }
 
+  //   Expire token
+  if (existingToken.expires < new Date()) {
+    return {
+      error: "Token expired",
+    };
+  }
   await db.user.update({
     where: {
       id: existingUser.id,

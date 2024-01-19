@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { login } from "@/action/login";
+import Link from "next/link";
 
 export const LoginForm = () => {
   const searchParams = useSearchParams();
@@ -111,6 +112,9 @@ export const LoginForm = () => {
                       placeholder="********"
                     />
                   </FormControl>
+                  <Button size={"sm"} variant={"link"} className="font-normal">
+                    <Link href="/auth/forgot-password">Forgot password?</Link>
+                  </Button>
                   <FormMessage>{formState.errors.email?.message}</FormMessage>
                 </FormItem>
               )}
