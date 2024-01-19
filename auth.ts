@@ -33,6 +33,7 @@ export const {
   },
   callbacks: {
     async signIn({ account, user }) {
+      console.log("signIn", account, user);
       // allow OAuth accounts to sign in
       if (account?.provider != "credentials") return true;
 

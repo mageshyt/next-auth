@@ -49,7 +49,7 @@ export const LoginForm = () => {
         login(data).then((res) => {
           console.log("res", res);
           if (res?.success) {
-            setFormSuccess("Login Success");
+            setFormSuccess(res?.message || "Login in successfully");
             setFormError("");
 
             setTimeout(() => {

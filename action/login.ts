@@ -5,9 +5,8 @@ import { getUserByEmail } from "@/data/user";
 import { sendVerificationEmail } from "@/lib/mail";
 import { generateVerificationToken } from "@/lib/tokens";
 
-import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+
 import { LoginSchema } from "@/schemas";
-import axios from "axios";
 import { AuthError } from "next-auth";
 import { z } from "zod";
 
@@ -30,7 +29,6 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
         error: "Email does not exist",
       };
     }
-    console.log("EXISTING USER ", existingUser);
     if (!existingUser.emailVerified) {
       // generate new token
       const verificationToken = await generateVerificationToken(email);
@@ -40,10 +38,10 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
         verificationToken.email,
         verificationToken.token
       );
-
+      console.log(response);
       return {
         success: true,
-        error: "Confirmation email sent",
+        message: "Confirmation email sent",
       };
     }
 
