@@ -32,3 +32,15 @@ export const RegisterSchema = z.object({
     message: "Phone number is required",
   }),
 });
+
+export const ForgotPasswordSchema = z.object({
+  password: z.string().min(6, {
+    message: "Minimum of 6 characters required",
+  }),
+});
+
+export const ResetSchema = z.object({
+  email: z.string().email({
+    message: "Email is required",
+  }),
+});
