@@ -113,7 +113,7 @@ export const LoginForm = () => {
                     />
                   </FormControl>
                   <Button size={"sm"} variant={"link"} className="font-normal">
-                    <Link href="/auth/forgot-password">Forgot password?</Link>
+                    <Link href="/auth/reset">Forgot password?</Link>
                   </Button>
                   <FormMessage>{formState.errors.email?.message}</FormMessage>
                 </FormItem>

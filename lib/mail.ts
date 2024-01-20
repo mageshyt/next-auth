@@ -39,7 +39,7 @@ export const sendPasswordResetEmail = async (
   name: string,
   passwordResetToken: string
 ) => {
-  const resetLink = `http://localhost:3000/auth/reset-password?token=${passwordResetToken}`;
+  const resetLink = `http://localhost:3000/auth/new-password?token=${passwordResetToken}`;
   const html = `
   <div style="font-family: 'Arial', sans-serif; max-width: 600px; margin: auto;">
     <h1 style="color: #007BFF;">Hi ${name},</h1>
@@ -53,9 +53,10 @@ export const sendPasswordResetEmail = async (
 `;
 
   const subject = "Reset your password";
+  const from = `onboarding@resend.dev`;
 
   await resend.emails.send({
-    from: ``,
+    from,
     to: email,
     subject,
     html,
