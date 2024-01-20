@@ -9,7 +9,7 @@ const page = async () => {
   const user = session?.user;
 
   return (
-    <div className="bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800 h-screen flex items-center justify-center">
+    <div className="op,_var(--tw-gradient-stops))] from-sky-400 to-blue-800 h-screen flex items-center justify-center">
       <Card className="w-[450px] py-10   shadow-md">
         <CardHeader>
           <h1 className="text-2xl font-bold text-center">
