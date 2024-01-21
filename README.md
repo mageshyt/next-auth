@@ -10,21 +10,21 @@ This repository serves as an advanced guide for implementing Next Auth v5 in 202
 - 🌐 OAuth Provider (Social login with Google & GitHub)
 - 🔒 Forgot password functionality
 - ✉️ Email verification
-
-## Todo Functions
-
-- 📱 Two-factor verification
-- 👥 User roles (Admin & User)
-- 🔓 Login component (Opens in redirect or modal)
 - 📝 Register component
 - 🤔 Forgot password component
 - ✅ Verification component
 - ⚠️ Error component
 - 🔘 Login button
 - 🚪 Logout button
+- 👥 User roles (Admin & User)
+- 🔓 Login component (Opens in redirect or modal)
 - 🚧 Role Gate
 - 🔍 Exploring next.js middleware
 - 📈 Extending & Exploring next-auth session
+
+## Todo Functions
+
+- 📱 Two-factor verification
 - 🔄 Exploring next-auth callbacks
 - 👤 useCurrentUser hook
 - 🛂 useRole hook

@@ -1,12 +1,13 @@
 import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);
+const domain = process.env.NEXT_PUBLIC_APP_URL;
 
 export const sendVerificationEmail = async (
   email: string,
   name: string,
   verificationToken: string
 ) => {
-  const confirmLink = `http://localhost:3000/auth/new-verification?token=${verificationToken}`;
+  const confirmLink = `${domain}/auth/new-verification?token=${verificationToken}`;
   const html = `
   <div style="font-family: 'Arial', sans-serif; max-width: 600px; margin: auto;">
     <h1 style="color: #007BFF;">Hi ${name},</h1>
@@ -39,7 +40,7 @@ export const sendPasswordResetEmail = async (
   name: string,
   passwordResetToken: string
 ) => {
-  const resetLink = `http://localhost:3000/auth/new-password?token=${passwordResetToken}`;
+  const resetLink = `${domain}/auth/new-password?token=${passwordResetToken}`;
   const html = `
   <div style="font-family: 'Arial', sans-serif; max-width: 600px; margin: auto;">
     <h1 style="color: #007BFF;">Hi ${name},</h1>
@@ -55,6 +56,36 @@ export const sendPasswordResetEmail = async (
   const subject = "Reset your password";
   const from = `onboarding@resend.dev`;
 
+  await resend.emails.send({
+    from,
+    to: email,
+    subject,
+    html,
+  });
+};
+
+export const sendTwoFactorEmail = async (
+  email: string,
+  name: string,
+  token: string
+) => {
+  const confirmLink = `${domain}/auth/new-verification?token=${token}`;
+  const html = `
+  <div style="font-family: 'Arial', sans-serif; max-width: 600px; margin: auto;">
+    <h1 style="color: #007BFF; font-size: 24px; margin-bottom: 20px;">Hi ${name},</h1>
+    <p style="color: #555; font-size: 16px;">Welcome to the Next Auth Toolkit!</p>
+    <p style="color: #555; font-size: 16px;">To verify your email address, please click the button below:</p>
+    <a href="${confirmLink}" style="display: inline-block; padding: 12px 20px; background-color: #007BFF; color: #fff; text-decoration: none; border-radius: 5px; margin-top: 15px;">Verify Email</a>
+    <p style="color: #555; font-size: 16px;">Or copy and paste this link into your browser:</p>
+    <p style="color: #777; font-size: 16px; margin-bottom: 20px;">${confirmLink}</p>
+    <p style="color: #555; font-size: 16px;">Thanks,</p>
+    <p style="color: #007BFF; font-size: 18px; font-weight: bold;">The Next Auth Toolkit</p>
+  </div>
+`;
+
+  const subject = "Your Two-Factor Authentication Code";
+  const from = "onboarding@resend.dev";
+  // send the mail
   await resend.emails.send({
     from,
     to: email,
