@@ -93,6 +93,7 @@ export const {
         session.user.email = token.email;
         session.user.role = token.role as UserRole;
         session.user.phone = token.phone as string;
+        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
 
         // session.user.isOAuth = token.isOAuth as boolean;
       }
