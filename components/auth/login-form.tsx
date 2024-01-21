@@ -37,7 +37,6 @@ export const LoginForm = () => {
     defaultValues: {
       email: "",
       password: "",
-      code: "",
     },
   });
 
@@ -49,6 +48,7 @@ export const LoginForm = () => {
 
   const onSubmit = (data: z.infer<typeof LoginSchema>) => {
     try {
+      console.log(data);
       startTransition(() => {
         login(data).then((res) => {
           console.log(res);
@@ -84,6 +84,26 @@ export const LoginForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">
+            {showTwoFactor && (
+              <FormField
+                control={form.control}
+                name="code"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Two Factor Code</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        disabled={isPending}
+                        placeholder="123456"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
             {!showTwoFactor && (
               <>
                 <FormField
@@ -136,33 +156,12 @@ export const LoginForm = () => {
                 />
               </>
             )}
-
-            {showTwoFactor && (
-              <FormField
-                name="code"
-                control={form.control}
-                render={({ field, formState }) => (
-                  <FormItem>
-                    <FormLabel>Two-Factor Code</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        disabled={isPending}
-                        type="text"
-                        placeholder="1234"
-                      />
-                    </FormControl>
-                    <FormMessage>{formState.errors.code?.message}</FormMessage>
-                  </FormItem>
-                )}
-              />
-            )}
           </div>
           {/* form Error */}
           <FormError message={urlError || formError} />
           <FormSuccess message={formSuccess} />
           {/* submit btn */}
-          <Button disabled={isPending} type="submit" className="w-full">
+          <Button type="submit" className="w-full disabled:cursor-not-allowed">
             {showTwoFactor ? "Verify Code" : "Login"}
           </Button>
         </form>
