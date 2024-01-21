@@ -1,6 +1,14 @@
-import { auth } from "@/auth";
+"use client";
+import { auth, signOut } from "@/auth";
 import { CardWrapper } from "@/components/auth/card-wrapper";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+
 import React from "react";
 
 const page = async () => {
@@ -9,8 +17,8 @@ const page = async () => {
   const user = session?.user;
 
   return (
-    <div className="op,_var(--tw-gradient-stops))] from-sky-400 to-blue-800 h-screen flex items-center justify-center">
-      <Card className="w-[450px] py-10   shadow-md">
+    <div className=" h-screen flex items-center justify-center">
+      <Card className="w-[450px]  h-fit   shadow-md">
         <CardHeader>
           <h1 className="text-2xl font-bold text-center">
             🔐 Authenticated {user?.name}
@@ -25,6 +33,17 @@ const page = async () => {
               <pre className="text-black text-lg">email: {user?.email}</pre>
               <pre className="text-black text-lg">phone: {user?.phone}</pre>
             </div>
+            <Button
+              onClick={() =>
+                signOut({
+                  redirectTo: "/auth/login",
+                })
+              }
+              className="w-full m-4"
+              size="lg"
+            >
+              Sign out
+            </Button>
           </div>
         </CardContent>
       </Card>

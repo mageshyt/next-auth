@@ -64,20 +64,23 @@ export const sendPasswordResetEmail = async (
   });
 };
 
-export const sendTwoFactorEmail = async (
-  email: string,
-  name: string,
-  token: string
-) => {
-  const confirmLink = `${domain}/auth/new-verification?token=${token}`;
+type TwoFactorEmailProps = {
+  email: string;
+  name: string;
+  token: string;
+};
+
+export const sendTwoFactorEmail = async ({
+  email,
+  name,
+  token,
+}: TwoFactorEmailProps) => {
   const html = `
   <div style="font-family: 'Arial', sans-serif; max-width: 600px; margin: auto;">
     <h1 style="color: #007BFF; font-size: 24px; margin-bottom: 20px;">Hi ${name},</h1>
     <p style="color: #555; font-size: 16px;">Welcome to the Next Auth Toolkit!</p>
-    <p style="color: #555; font-size: 16px;">To verify your email address, please click the button below:</p>
-    <a href="${confirmLink}" style="display: inline-block; padding: 12px 20px; background-color: #007BFF; color: #fff; text-decoration: none; border-radius: 5px; margin-top: 15px;">Verify Email</a>
-    <p style="color: #555; font-size: 16px;">Or copy and paste this link into your browser:</p>
-    <p style="color: #777; font-size: 16px; margin-bottom: 20px;">${confirmLink}</p>
+    <p style="color: #555; font-size: 16px;">Your two-factor authentication code is:</p>
+    <p style="color: #555; font-size: 24px; font-weight: bold; margin-bottom: 20px;">${token}</p>
     <p style="color: #555; font-size: 16px;">Thanks,</p>
     <p style="color: #007BFF; font-size: 18px; font-weight: bold;">The Next Auth Toolkit</p>
   </div>
